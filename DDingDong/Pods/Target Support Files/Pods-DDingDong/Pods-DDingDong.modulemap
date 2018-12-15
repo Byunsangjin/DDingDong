@@ -1,6 +1,0 @@
-framework module Pods_DDingDong {
-  umbrella header "Pods-DDingDong-umbrella.h"
-
-  export *
-  module * { export * }
-}

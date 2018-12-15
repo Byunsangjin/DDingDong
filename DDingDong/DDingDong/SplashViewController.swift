@@ -21,6 +21,9 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 로그아웃 상태로 만들어 놓는다.
+        try! Auth.auth().signOut()
+        
         // 배경화면 설정
         self.view.backgroundColor = UIColor(hexString: "#0085ff")
         

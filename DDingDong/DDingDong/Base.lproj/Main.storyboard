@@ -344,7 +344,7 @@
                                     <action selector="cancelBtnPressed:" destination="4w0-c6-uKq" eventType="touchUpInside" id="leh-nX-Ykl"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add_photo" translatesAutoresizingMaskIntoConstraints="NO" id="QxE-AB-O9M">
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add_photo" translatesAutoresizingMaskIntoConstraints="NO" id="QxE-AB-O9M">
                                 <rect key="frame" x="112.5" y="40" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="4QW-Pc-g3n"/>
@@ -380,6 +380,7 @@
                     <connections>
                         <outlet property="cancelButton" destination="jay-G4-4GK" id="yWS-PV-MDY"/>
                         <outlet property="emailTextField" destination="oDr-Uc-byW" id="6wk-fT-HZC"/>
+                        <outlet property="imageView" destination="QxE-AB-O9M" id="g5v-g9-FTK"/>
                         <outlet property="nameTextField" destination="o2c-C2-Djb" id="NT8-lH-iD9"/>
                         <outlet property="pwTextField" destination="aaP-Xh-hqd" id="gcd-hP-HxK"/>
                         <outlet property="rePwTextField" destination="a6y-ti-5h1" id="QXp-ua-3Uf"/>
@@ -416,6 +417,7 @@
                 <tabBarController storyboardIdentifier="MainViewTabBarController" automaticallyAdjustsScrollViewInsets="NO" id="PgV-tx-UBa" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="etp-on-e72">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

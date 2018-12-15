@@ -88,6 +88,47 @@ extension AppDelegate: GIDSignInDelegate {
                     print("로그인 데이터 에러 : \(error?.localizedDescription)")
                     return
                 } else { // 에러가 없다면
+                    let user = authResult?.user
+                    let uid = user?.uid
+                    
+                    // 데이터 베이스에 구글 유저 정보 넣기
+                    var image = UIImage()
+                    image = #imageLiteral(resourceName: "profile")
+                    
+                    // 이미지 데이터로 변환
+                    let data = image.jpegData(compressionQuality: 0.1) as! Data
+                    
+                    // 저장소에 저장
+                    let spaceRef = Storage.storage().reference().child("users").child(uid!)
+                    
+                    spaceRef.putData(data, metadata: nil) { (metadata, error) in
+                        // 에러가 발생 했을 때
+                        guard metadata != nil else {
+                            print("metadata error")
+                            return
+                        }
+                        
+                        // 다운로드 url에 접근한다.
+                        spaceRef.downloadURL { (url, error) in
+                            // 에러가 발생 했을 때
+                            guard let imageUrl = url else {
+                                print("download error \(error?.localizedDescription)")
+                                return
+                            }
+                            
+                            if error != nil {
+                                print("에러 = \(error?.localizedDescription)")
+                            } else {
+                                // 데이터 베이스에 접근해서 이름 값과 이미지 다운로드 url을 넣어준다
+                                
+                                InstanceID.instanceID().instanceID(handler: { (result, error) in
+                                    Database.database().reference().child("users").child(uid!).setValue(["userName": user?.displayName,"pushToken": result?.token, "profileImageUrl": imageUrl.absoluteString, "uid": uid!])
+                                })
+                                
+                            }
+                        }
+                    }
+                    
                     let loginVC = self.window?.rootViewController?.presentedViewController as! LoginViewController
                     let mainVC = loginVC.storyboard?.instantiateViewController(withIdentifier: "MainViewTabBarController") as! UITabBarController
                     loginVC.present(mainVC, animated: true)

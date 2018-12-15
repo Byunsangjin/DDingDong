@@ -81,12 +81,18 @@ extension AppDelegate: GIDSignInDelegate {
         } else {
             
             guard let authentication = user.authentication else { return }
-            let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
-                                                           accessToken: authentication.accessToken)
+            let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
             
-            let loginVC = self.window?.rootViewController?.presentedViewController as! LoginViewController
-            let mainVC = loginVC.storyboard?.instantiateViewController(withIdentifier: "MainViewController") as! MainViewController
-            loginVC.present(mainVC, animated: true)
+            Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
+                if error != nil { // 에러가 있으면
+                    print("로그인 데이터 에러 : \(error?.localizedDescription)")
+                    return
+                } else { // 에러가 없다면
+                    let loginVC = self.window?.rootViewController?.presentedViewController as! LoginViewController
+                    let mainVC = loginVC.storyboard?.instantiateViewController(withIdentifier: "MainViewTabBarController") as! UITabBarController
+                    loginVC.present(mainVC, animated: true)
+                }
+            }
         }
     }
     

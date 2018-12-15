@@ -54,13 +54,9 @@ class ViewController: UIViewController {
         
         print(caps)
         if caps { // 서버 점검 중 이라면 알람띄우고 앱 종료
-            let alert = UIAlertController(title: "공지사항", message: message, preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "확인", style: .default, handler: { (_) in
+            self.alert("공지사항") {
                 exit(0)
-            }))
-            
-            self.present(alert, animated: true)
+            }
         } else { // 그렇지 않다면 로그인으로 이동
             let loginVC = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
             

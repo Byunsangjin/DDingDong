@@ -34,6 +34,10 @@ class LoginViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // 탭 클릭시 키보드 사라지게 하는 제스처 추가
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+        
         // 구글 아이디 로그인 델리 게이트
         GIDSignIn.sharedInstance().uiDelegate = self
         
@@ -73,6 +77,13 @@ class LoginViewController: UIViewController {
                 })
             }
         }
+    }
+    
+    
+    
+    // 터치 했을 떄 키보드가 사라지게 하는 메소드
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
     

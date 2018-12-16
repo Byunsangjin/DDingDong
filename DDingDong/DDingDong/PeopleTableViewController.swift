@@ -13,9 +13,6 @@ class PeopleTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("Main View : \(Auth.auth().currentUser?.displayName)")
-
     }
     
     

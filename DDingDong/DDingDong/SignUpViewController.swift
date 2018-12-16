@@ -48,11 +48,16 @@ class SignUpViewController: UIViewController {
         
         // 이미지 탭
         self.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imagePicker)))
+
+        // 탭 클릭시 키보드 사라지게 하는 제스처 추가
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
         
     }
     
     
     
+    // 계정 생성 메소드
     func createUser(email: String, password: String) {
         Auth.auth().createUser(withEmail: self.emailTextField.text!, password: self.pwTextField.text!) { (result, error) in
             if error == nil { // 에러가 없다면
@@ -116,6 +121,13 @@ class SignUpViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    
+    
+    // 터치 했을 떄 키보드가 사라지게 하는 메소드
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
     

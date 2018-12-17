@@ -310,10 +310,10 @@
             </objects>
             <point key="canvasLocation" x="3623" y="856"/>
         </scene>
-        <!--View Controller-->
+        <!--Setting View Controller-->
         <scene sceneID="6Jz-Sb-kcF">
             <objects>
-                <viewController id="Wcr-zz-3we" sceneMemberID="viewController">
+                <viewController id="Wcr-zz-3we" customClass="SettingViewController" customModule="DDingDong" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e5d-KE-ms1">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -322,12 +322,19 @@
                                 <rect key="frame" x="153" y="92" width="69" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="프로필 변경"/>
+                                <connections>
+                                    <action selector="changeBtnPressed:" destination="Wcr-zz-3we" eventType="touchUpInside" id="ouH-v3-m8r"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dak-7J-Gk1">
                                 <rect key="frame" x="159" y="154" width="56" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="테마 적용"/>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ci6-hA-msc">
+                                <rect key="frame" x="67" y="269" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="uug-Wl-OIh"/>
@@ -335,6 +342,9 @@
                     <tabBarItem key="tabBarItem" title="" image="setting" id="z9T-kv-8sf">
                         <inset key="imageInsets" minX="0.0" minY="-5" maxX="0.0" maxY="-15"/>
                     </tabBarItem>
+                    <connections>
+                        <outlet property="profileImageView" destination="ci6-hA-msc" id="E1Z-IZ-WbO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wK0-f7-tED" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

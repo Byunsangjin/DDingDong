@@ -9,6 +9,12 @@
 import UIKit
 
 class ChatViewController: UIViewController {
+    
+    // MARK:- Outlets
+    
+    
+    
+    
     // MARK:- Variable
     var users: [UserModel] = []
     

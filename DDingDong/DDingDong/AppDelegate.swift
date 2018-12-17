@@ -75,6 +75,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 extension AppDelegate: GIDSignInDelegate {
     
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
+        print("로그인 버튼 클릭")
         if let error = error { // 에러가 있다면
             print("구글 로그인 에러 : \(error.localizedDescription)")
             return

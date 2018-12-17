@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import Firebase
 import GoogleSignIn
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,15 +19,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        
         FirebaseApp.configure()
+        
+        // 로그아웃
+        try! Auth.auth().signOut()
+        GIDSignIn.sharedInstance()?.signOut()
         
         // 구글 로그인 설정
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
-        
-        GIDSignIn.sharedInstance()?.signOut()
         
         return true
     }
@@ -73,24 +73,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 extension AppDelegate: GIDSignInDelegate {
-    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error?) {
-        print("로그인 버튼 클릭")
-        if let error = error { // 에러가 있다면
-            print("구글 로그인 에러 : \(error.localizedDescription)")
-            return
-        } else {
-            
+        if error == nil { // 에러가 없다며
             guard let authentication = user.authentication else { return }
             let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken, accessToken: authentication.accessToken)
             
             Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
-                if error != nil { // 에러가 있으면
-                    print("로그인 데이터 에러 : \(error?.localizedDescription)")
-                    return
-                } else { // 에러가 없다면
+                if error == nil { // 에러가 없다면
+                    print("로그인 데이터 성공")
                     let user = authResult?.user
                     let uid = user?.uid
+                    
+                    // uid와 name을 데이터 베이스에 저장한다
+                    Database.database().reference().child("users").child(uid!).setValue(["userName": user?.displayName, "uid": uid])
                     
                     // 데이터 베이스에 구글 유저 정보 넣기
                     var image = UIImage()
@@ -103,44 +98,31 @@ extension AppDelegate: GIDSignInDelegate {
                     let spaceRef = Storage.storage().reference().child("users").child(uid!)
                     
                     spaceRef.putData(data, metadata: nil) { (metadata, error) in
-                        // 에러가 발생 했을 때
-                        guard metadata != nil else {
-                            print("metadata error")
-                            return
-                        }
-                        
+                        print("putData")
                         // 다운로드 url에 접근한다.
                         spaceRef.downloadURL { (url, error) in
                             // 에러가 발생 했을 때
-                            guard let imageUrl = url else {
-                                print("download error \(error?.localizedDescription)")
-                                return
-                            }
-                            
-                            if error != nil {
-                                print("에러 = \(error?.localizedDescription)")
-                            } else {
-                                // 데이터 베이스에 접근해서 이름 값과 이미지 다운로드 url을 넣어준다
-                                
-                                InstanceID.instanceID().instanceID(handler: { (result, error) in
-                                    Database.database().reference().child("users").child(uid!).setValue(["userName": user?.displayName,"pushToken": result?.token, "profileImageUrl": imageUrl.absoluteString, "uid": uid!])
+                            if error == nil {
+                                // 이미지 다운로드 url을 데이터 베이스에 저장한다.
+                                Database.database().reference().child("users").child(uid!).updateChildValues(["profileImageUrl": url!.absoluteString], withCompletionBlock: { (error, dataSnapshot) in
+                                    let loginVC = self.window?.rootViewController?.presentedViewController as! LoginViewController
+                                    let mainVC = loginVC.storyboard?.instantiateViewController(withIdentifier: "MainViewTabBarController") as! UITabBarController
+                                    loginVC.present(mainVC, animated: true)
                                 })
-                                
+                            } else {
+                                print("downloadURL 에러")
+                                return
                             }
                         }
                     }
-                    
-                    let loginVC = self.window?.rootViewController?.presentedViewController as! LoginViewController
-                    let mainVC = loginVC.storyboard?.instantiateViewController(withIdentifier: "MainViewTabBarController") as! UITabBarController
-                    loginVC.present(mainVC, animated: true)
+                } else {
+                    print("signInAndRetrieveData 에러")
+                    return
                 }
             }
+        } else {
+            print("Google SignError : \(error?.localizedDescription)")
         }
     }
-    
-    func sign(_ signIn: GIDSignIn!, didDisconnectWith user: GIDGoogleUser!, withError error: Error!) {
-        print("구글 로그인 끊어짐")
-    }
-    
-    
 }
+

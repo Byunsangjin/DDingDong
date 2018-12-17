@@ -11,7 +11,7 @@ import Firebase
 import GoogleSignIn
 import SnapKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, GIDSignInUIDelegate, UIGestureRecognizerDelegate {
     
     // MARK:- Outlets
     @IBOutlet var emailTextField: UITextField!
@@ -19,27 +19,30 @@ class LoginViewController: UIViewController {
     @IBOutlet var loginButton: UIButton!
     @IBOutlet var signUpButton: UIButton!
     
-    @IBOutlet var googleSignInButton: GIDSignInButton! // 구글 로그인 버튼
-    
-    
-    
     
     // MARK:- Constants
     let remoteConfig = RemoteConfig.remoteConfig()
     let dataRef = Database.database().reference()
     
+    @IBOutlet var googleSignBtn: GIDSignInButton!
     
     
     // MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.view.accessibilityScroll(UIAccessibilityScrollDirection.down)
+        
         // 탭 클릭시 키보드 사라지게 하는 제스처 추가
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tap)
         
-        // 구글 아이디 로그인 델리 게이트
-        GIDSignIn.sharedInstance().uiDelegate = self
+        // 구글 로그인 버튼 클릭 시 로그인 제스처 추가
+        let googleBtnTap = UITapGestureRecognizer(target: self, action: #selector(googleSign))
+        self.googleSignBtn.addGestureRecognizer(googleBtnTap)
+        
+        GIDSignIn.sharedInstance().uiDelegate = self // 델리게이트 설정
+        self.googleSignBtn.style = .wide // 구글 버튼 속성
         
         // statusBar 설정
         var statusBar = UIView()
@@ -70,6 +73,7 @@ class LoginViewController: UIViewController {
                 InstanceID.instanceID().instanceID(handler: { (result, error) in
                     if error == nil {
                         let token = result?.token
+                        // 토큰을 DB에 업데이트
                         self.dataRef.child("users").child(uid!).updateChildValues(["pushToken": token!])
                     } else {
                         print("Token error : \(error?.localizedDescription)")
@@ -81,9 +85,17 @@ class LoginViewController: UIViewController {
     
     
     
+    
     // 터치 했을 떄 키보드가 사라지게 하는 메소드
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
+    }
+    
+    
+    
+    // 구글 로그인 액션
+    @objc func googleSign() {
+        GIDSignIn.sharedInstance().signIn()
     }
     
     
@@ -93,10 +105,7 @@ class LoginViewController: UIViewController {
     @IBAction func loginBtnPressed(_ sender: Any) {
         Auth.auth().signIn(withEmail: self.emailTextField.text!, password: self.passwordTextField.text!) { (user, error) in
             if error != nil { // 에러가 있을 때
-                let alert = UIAlertController(title: "로그인 실패", message: error?.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "확인", style: .default, handler: nil))
-                
-                self.present(alert, animated: false)
+                self.alert("로그인 실패", (error?.localizedDescription)!)
             }
         }
     }
@@ -109,12 +118,4 @@ class LoginViewController: UIViewController {
         
         self.present(signUpVC, animated: true)
     }
-    
-}
-
-
-
-// 구글 로그인 델리게이트
-extension LoginViewController: GIDSignInUIDelegate {
-    
 }

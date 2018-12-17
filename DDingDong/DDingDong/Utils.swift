@@ -10,10 +10,10 @@ import UIKit
 
 extension UIViewController {
     // 메세지
-    func alert(_ message: String, completion: (()->Void)? = nil) {
+    func alert(_ title: String?, _ message: String, completion: (()->Void)? = nil) {
         // 메인 스레드에서 실행되도록
         DispatchQueue.main.async {
-            let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
             let okAction = UIAlertAction(title: "확인", style: .cancel) { (_) in
                 completion?() // completion 매개변수의 값이 nil이 아닐때만 실행
             }

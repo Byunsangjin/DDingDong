@@ -57,7 +57,7 @@ class ViewController: UIViewController {
         
         print(caps)
         if caps { // 서버 점검 중 이라면 알람띄우고 앱 종료
-            self.alert("공지사항") {
+            self.alert(nil, "공지사항") {
                 exit(0)
             }
         } else { // 그렇지 않다면 로그인으로 이동

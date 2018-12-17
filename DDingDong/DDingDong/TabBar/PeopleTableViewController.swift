@@ -17,7 +17,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     // MARK:- Variables
-    var user: [UserModel] = [] // 유저 정보를 담을 객체
+    var users: [UserModel] = [] // 유저 정보를 담을 객체
     
     
     
@@ -40,7 +40,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.user.count
+        return self.users.count
     }
     
     
@@ -49,7 +49,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         var cell = tableView.dequeueReusableCell(withIdentifier: "PeopleCell", for: indexPath) as! PeopleCell
         
         // 이미지 설정
-        let url = URL(string: user[indexPath.row].profileImageUrl!) // 이미지 URL
+        let url = URL(string: users[indexPath.row].profileImageUrl!) // 이미지 URL
         
         cell.profileImageView.kf.setImage(with: url) // 이미지 설정
         
@@ -57,10 +57,21 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         cell.profileImageView.layer.cornerRadius = 50 / 2
         cell.profileImageView.clipsToBounds = true
         
-        cell.nameLabel.text = user[indexPath.row].userName // 이름 설정
-        cell.conditionLabel.text = user[indexPath.row].condition // 상태 메세지
+        cell.nameLabel.text = users[indexPath.row].userName // 이름 설정
+        cell.conditionLabel.text = users[indexPath.row].condition // 상태 메세지
         
         return cell
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let chatVC = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        
+        // 선택한 유저의 정보를 넘긴다.
+        chatVC.users = [self.users[indexPath.row]]
+        
+        self.navigationController?.pushViewController(chatVC, animated: true)
     }
     
     
@@ -75,7 +86,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         // DB에서 정보 받아오기
         self.dataRef.child("users").observe(.value) { (dataSnapshot) in
             // 배열 초기화 (이유 : 새로 계정을 생성할 때 DB에서 정보를 다시 받아오게 되는데 그 때 중복되기 때문)
-            self.user.removeAll()
+            self.users.removeAll()
             
             let myUid = Auth.auth().currentUser?.uid
             
@@ -88,7 +99,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
                 
                 // 자신을 제외한 나머지 데이터를 배열에 저장한다.
                 if myUid != userModel.uid {
-                    self.user.append(userModel)
+                    self.users.append(userModel)
                 }
             }
             

@@ -33,7 +33,8 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         super.viewDidLoad()
         
         // StatusBar 색상 설정
-        self.appDelegate.statusBarSet(view: self.view)
+        self.appDelegate.statusBarSet(view: (self.navigationController?.view)!)
+        
         
         // 구분선 없애기
         self.tableView.separatorStyle = .none

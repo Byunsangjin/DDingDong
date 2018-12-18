@@ -14,20 +14,25 @@ import Firebase
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
-    
+    // MARK:- Variables
     var window: UIWindow?
+    
+    var themeColor: String?
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         
         // 로그아웃
-        try! Auth.auth().signOut()
-        GIDSignIn.sharedInstance()?.signOut()
+         try! Auth.auth().signOut()
+         GIDSignIn.sharedInstance()?.signOut()
         
         // 구글 로그인 설정
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
+        
+        // 테마 색상 불러오기
+        self.themeColor = RemoteConfig.remoteConfig()["splash_background"].stringValue
         
         return true
     }
@@ -66,6 +71,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return GIDSignIn.sharedInstance().handle(url,
                                                  sourceApplication: sourceApplication,
                                                  annotation: annotation)
+    }
+    
+    
+    
+    // statusBar 색상 설정
+    func statusBarSet(view: UIView) {
+        // statusBar 설정
+        var statusBar = UIView()
+        view.addSubview(statusBar)
+        
+        statusBar.snp.makeConstraints { (make) in
+            make.right.left.equalTo(view)
+            make.height.equalTo(UIApplication.shared.statusBarFrame.height)
+        }
+        
+        // 배경 색상 설정
+        statusBar.backgroundColor = UIColor(hexString: self.themeColor!)
     }
     
 }

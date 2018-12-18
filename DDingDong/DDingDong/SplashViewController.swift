@@ -17,6 +17,11 @@ class ViewController: UIViewController {
     
     
     
+    // MARK:- Constants
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
+    
+    
     // MARK:- Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +30,7 @@ class ViewController: UIViewController {
         try! Auth.auth().signOut()
         
         // 배경화면 설정
-        self.view.backgroundColor = UIColor(hexString: "#0085ff")
+        self.view.backgroundColor = UIColor(hexString: self.appDelegate.themeColor!)
         
         // 우선 원격 구성 개체 인스턴스를 가져오고 캐시를 빈번하게 새로고칠 수 있도록 개발자 모드를 사용 설정합니다.
         remoteConfig = RemoteConfig.remoteConfig()
@@ -50,7 +55,7 @@ class ViewController: UIViewController {
     
     
     func displayWelcome() {
-        let color = remoteConfig["splash_background"].stringValue
+        let color = self.appDelegate.themeColor
         let caps = remoteConfig["splash_message_caps"].boolValue
         let message = remoteConfig["splash_message"].stringValue
         

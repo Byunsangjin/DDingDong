@@ -11,7 +11,7 @@ import UIKit
 class ChatViewController: UIViewController {
     
     // MARK:- Outlets
-    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
     
@@ -25,6 +25,9 @@ class ChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        // StatusBar 색상 설정
+        appDelegate.statusBarSet(view: self.view)
         print("ChatViewController")
     }
 

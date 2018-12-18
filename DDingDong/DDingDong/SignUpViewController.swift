@@ -26,11 +26,16 @@ class SignUpViewController: UIViewController {
     
     
     
+    // MARK:- Variables
+    var imageSelected: Bool? = false
+    
+    
     // MARK:- Constants
     let remoteConfig = RemoteConfig.remoteConfig() // 원격
-    var imageSelected: Bool? = false
     let stroage = Storage.storage() // 저장소 참조
     let dataRef = Database.database().reference() // 데이터 베이스 참조
+    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
     
@@ -41,18 +46,29 @@ class SignUpViewController: UIViewController {
         // 유동적 constraints
         self.topConstraint.constant = self.view.frame.height / 20
         
+        // StatusBar 색상 설정
+        appDelegate.statusBarSet(view: self.view)
+        
         // 버튼 색상 설정
-        let color = self.remoteConfig["splash_background"].stringValue
+        initSet()
+    }
+    
+    
+    
+    // 처음 화면
+    func initSet() {
+        let color = appDelegate.themeColor
         self.signUpButton.backgroundColor = UIColor(hexString: color!)
         self.cancelButton.backgroundColor = UIColor(hexString: color!)
         
         // 이미지 탭
         self.imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(imagePicker)))
-
+        
         // 탭 클릭시 키보드 사라지게 하는 제스처 추가
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tap)
     }
+    
     
     
     

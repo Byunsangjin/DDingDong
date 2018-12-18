@@ -8,6 +8,7 @@
 
 import UIKit
 
+// 알람 메세지 
 extension UIViewController {
     // 메세지
     func alert(_ title: String?, _ message: String, completion: (()->Void)? = nil) {

@@ -23,6 +23,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     // MARK:- Constants
     let dataRef = Database.database().reference()
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     
     
@@ -31,9 +32,13 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // StatusBar 색상 설정
+        self.appDelegate.statusBarSet(view: self.view)
+        
         // 구분선 없애기
         self.tableView.separatorStyle = .none
         
+        // 유저 정보 받아오기
         self.getUserInfo()
     }
     

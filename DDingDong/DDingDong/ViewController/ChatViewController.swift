@@ -197,6 +197,4 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.sendMessage()
         }
     }
-    
-
 }

@@ -41,6 +41,9 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         
         // 유저 정보 받아오기
         self.getUserInfo()
+        
+        // 단체 채팅방 버튼
+        self.createSelectBtn()
     }
     
     
@@ -88,6 +91,14 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let selectUserVC = segue.destination as! SelectUserViewController
+        
+        selectUserVC.users = self.users
+    }
+    
+    
+    
     func getUserInfo() {
         // DB에서 정보 받아오기
         self.dataRef.child("users").observe(.value) { (dataSnapshot) in
@@ -114,5 +125,33 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
                 self.tableView?.reloadData()
             }
         }
+    }
+    
+    
+    
+    func createSelectBtn() {
+        var selectFriendBtn = UIButton()
+        self.view.addSubview(selectFriendBtn)
+        selectFriendBtn.snp.makeConstraints { (make) in
+            make.bottom.equalTo(view).offset(-80)
+            make.right.equalTo(view).offset(-20)
+            make.width.height.equalTo(50)
+        }
+        
+        // 단체 채팅방 버튼 동그랗게 만들기
+        selectFriendBtn.layer.cornerRadius = 25
+        selectFriendBtn.clipsToBounds = true
+        
+        // 버튼 이미지 설정
+        selectFriendBtn.setBackgroundImage(UIImage(named: "select"), for: .normal)
+        
+        selectFriendBtn.addTarget(self, action: #selector(showSelectFriendController), for: .touchUpInside)
+    }
+    
+    
+    
+    
+    @objc func showSelectFriendController() {
+        self.performSegue(withIdentifier: "SelectFriendSegue", sender: self)
     }
 }

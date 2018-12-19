@@ -64,11 +64,16 @@ class SettingViewController: UIViewController {
     func changeConditinon() {
         let conditionAlert = UIAlertController(title: "상태 메세지", message: nil, preferredStyle: .alert)
         conditionAlert.addTextField(configurationHandler: { (tf) in
-            tf.placeholder = self.user?.condition ?? "상태 메세지"
+            if self.user?.condition == nil || self.user?.condition == "" { // 상태 메세지가 없으면
+                tf.placeholder = "상태 메세지"
+            } else { // 상태 메세지가 있으면 기존 텍스트 띄워주기
+                tf.text = self.user?.condition
+            }
         })
         
         conditionAlert.addAction(UIAlertAction(title: "확인", style: .default) { (_) in
             self.conditionLabel.text = conditionAlert.textFields?[0].text!
+            self.user?.condition = conditionAlert.textFields?[0].text!
             self.dataRef.child("users").child(self.myUid!).updateChildValues(["condition": conditionAlert.textFields?[0].text!])
         })
         

@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class ChatViewController: UIViewController {
+class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     // MARK:- Outlets
     @IBOutlet var tableView: UITableView!
@@ -61,6 +61,50 @@ class ChatViewController: UIViewController {
     
     
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.messageList.count
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if self.messageList[indexPath.row].uid == self.myUid { // 내 메세지라면
+            let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as! MyMessageTableViewCell
+            
+            cell.messageLabel.text = self.messageList[indexPath.row].message
+            cell.messageLabel.numberOfLines = 0
+            return cell
+        } else { // 다른 사람의 메세지라면
+            let cell = tableView.dequeueReusableCell(withIdentifier: "DestinationTableViewCell", for: indexPath) as! DestinationTableViewCell
+            
+            // 메세지 설정
+            cell.messageLabel.text = self.messageList[indexPath.row].message
+            cell.messageLabel.numberOfLines = 0
+            
+            // 유저 배열을 순회하여 uid가 일치 하는 유저의 이름과 이미지를 넣어준다.
+            for user in users {
+                if self.messageList[indexPath.row].uid == user.uid {
+                    cell.userName.text = user.userName
+                    
+                    // 이미지 URL
+                    let url = URL(string: user.profileImageUrl!)
+                    
+                    // 이미지 원형으로 만들기
+                    cell.profileImage.layer.cornerRadius = cell.profileImage.frame.width / 2
+                    cell.profileImage.clipsToBounds = true
+                    
+                    // Kingfisher를 이용해 url을 통해 이미지를 받아오기
+                    cell.profileImage.kf.setImage(with: url)
+                }
+            }
+            
+            return cell
+        }
+    }
+    
+    
+    
+    // 메세지 보내는 버튼
     func sendMessage() {
         // 메세지가 아무것도 입력 되지 않았을 때 동작 동작 안하게 한다.
         let trimmingMsg = self.messageTextField.text?.trimmingCharacters(in: CharacterSet.whitespaces)
@@ -76,8 +120,6 @@ class ChatViewController: UIViewController {
         ]
         
         self.dataRef.child("chatrooms").child(self.chatRoomUid!).child("messages").childByAutoId().setValue(value) { (error, ref) in
-            //self.fmcSend()
-            
             // 입력 텍스트 필드 초기화
             self.messageTextField.text = ""
         }
@@ -111,6 +153,9 @@ class ChatViewController: UIViewController {
                     }
                 }
             }
+            
+            // 채팅방이 생성되었으면 첫 메세지 보내기
+            self.sendMessage()
         }
     }
     
@@ -124,9 +169,10 @@ class ChatViewController: UIViewController {
             
             for children in dataSnapshot.children.allObjects as! [DataSnapshot] {
                 let message = ChatModel.Message(JSON: children.value as! [String: AnyObject])
-                
                 self.messageList.append(message!)
             }
+            
+            self.tableView.reloadData()
         })
     }
     
@@ -143,6 +189,8 @@ class ChatViewController: UIViewController {
                 // 채팅방을 생성하고 다시 채팅방 uid를 설정해 주기위해 방을 한번 더 체크 한다.
                 self.checkChatRoom()
             }
+            
+            
         } else { // 채팅방이 있다면
             print("이미 채팅방이 있습니다.")
             // 메세지 보내기

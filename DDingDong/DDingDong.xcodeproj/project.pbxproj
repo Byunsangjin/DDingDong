@@ -23,6 +23,8 @@
 		60FBC7AC21C7E47B0012B70F /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBC7AB21C7E47B0012B70F /* ChatViewController.swift */; };
 		60FBC7AE21C7ED310012B70F /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBC7AD21C7ED310012B70F /* SettingViewController.swift */; };
 		60FBC7B021C90E630012B70F /* ChatModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBC7AF21C90E630012B70F /* ChatModel.swift */; };
+		60FBD0FF21C9E4D80012B70F /* MyMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBD0FE21C9E4D80012B70F /* MyMessageTableViewCell.swift */; };
+		60FBD10121C9E4E70012B70F /* DestinationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBD10021C9E4E70012B70F /* DestinationTableViewCell.swift */; };
 		F2F6F8527D2A680BE15B296A /* Pods_DDingDong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223C69F29F6CACAF26762DA5 /* Pods_DDingDong.framework */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		60FBC7AB21C7E47B0012B70F /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		60FBC7AD21C7ED310012B70F /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		60FBC7AF21C90E630012B70F /* ChatModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatModel.swift; sourceTree = "<group>"; };
+		60FBD0FE21C9E4D80012B70F /* MyMessageTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMessageTableViewCell.swift; sourceTree = "<group>"; };
+		60FBD10021C9E4E70012B70F /* DestinationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationTableViewCell.swift; sourceTree = "<group>"; };
 		7F91755A54872E5928CA4BE1 /* Pods-DDingDong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DDingDong.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DDingDong/Pods-DDingDong.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -100,21 +104,12 @@
 		6049AD4A21C3FCB900984733 /* DDingDong */ = {
 			isa = PBXGroup;
 			children = (
-				60FBC7AA21C7D5320012B70F /* TabBar */,
+				60FBD0FC21C9E0590012B70F /* Appdelegate */,
+				60FBD0FA21C9E0310012B70F /* Storyboard */,
+				60FBD0FB21C9E04D0012B70F /* ViewController */,
 				609395D721C6BCEF00DEE50A /* Cell */,
 				609395D421C6A32100DEE50A /* Model */,
-				6049AD4F21C3FCB900984733 /* Main.storyboard */,
-				6049AD5221C3FCBB00984733 /* Assets.xcassets */,
-				6049AD5421C3FCBB00984733 /* LaunchScreen.storyboard */,
-				6049AD5721C3FCBB00984733 /* Info.plist */,
-				6093956C21C4000900DEE50A /* GoogleService-Info.plist */,
-				6093957021C4064500DEE50A /* RemoteConfigDefaults.plist */,
-				6049AD4B21C3FCB900984733 /* AppDelegate.swift */,
-				6049AD4D21C3FCB900984733 /* SplashViewController.swift */,
-				6093956E21C4060B00DEE50A /* LoginViewController.swift */,
-				6093957621C4A20C00DEE50A /* SignUpViewController.swift */,
-				60FBC7AB21C7E47B0012B70F /* ChatViewController.swift */,
-				6093957821C4B0CC00DEE50A /* Utils.swift */,
+				60FBD0FD21C9E07B0012B70F /* Supporting */,
 			);
 			path = DDingDong;
 			sourceTree = "<group>";
@@ -132,6 +127,8 @@
 			isa = PBXGroup;
 			children = (
 				609395D821C6BCFC00DEE50A /* PeopleCell.swift */,
+				60FBD0FE21C9E4D80012B70F /* MyMessageTableViewCell.swift */,
+				60FBD10021C9E4E70012B70F /* DestinationTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -143,6 +140,47 @@
 				60FBC7AD21C7ED310012B70F /* SettingViewController.swift */,
 			);
 			path = TabBar;
+			sourceTree = "<group>";
+		};
+		60FBD0FA21C9E0310012B70F /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				6049AD4F21C3FCB900984733 /* Main.storyboard */,
+				6049AD5421C3FCBB00984733 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		60FBD0FB21C9E04D0012B70F /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				60FBC7AA21C7D5320012B70F /* TabBar */,
+				6049AD4D21C3FCB900984733 /* SplashViewController.swift */,
+				6093956E21C4060B00DEE50A /* LoginViewController.swift */,
+				6093957621C4A20C00DEE50A /* SignUpViewController.swift */,
+				60FBC7AB21C7E47B0012B70F /* ChatViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		60FBD0FC21C9E0590012B70F /* Appdelegate */ = {
+			isa = PBXGroup;
+			children = (
+				6049AD4B21C3FCB900984733 /* AppDelegate.swift */,
+			);
+			path = Appdelegate;
+			sourceTree = "<group>";
+		};
+		60FBD0FD21C9E07B0012B70F /* Supporting */ = {
+			isa = PBXGroup;
+			children = (
+				6049AD5221C3FCBB00984733 /* Assets.xcassets */,
+				6049AD5721C3FCBB00984733 /* Info.plist */,
+				6093956C21C4000900DEE50A /* GoogleService-Info.plist */,
+				6093957021C4064500DEE50A /* RemoteConfigDefaults.plist */,
+				6093957821C4B0CC00DEE50A /* Utils.swift */,
+			);
+			path = Supporting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -321,7 +359,9 @@
 				60FBC7AE21C7ED310012B70F /* SettingViewController.swift in Sources */,
 				609395D921C6BCFC00DEE50A /* PeopleCell.swift in Sources */,
 				6049AD4C21C3FCB900984733 /* AppDelegate.swift in Sources */,
+				60FBD0FF21C9E4D80012B70F /* MyMessageTableViewCell.swift in Sources */,
 				60FBC7AC21C7E47B0012B70F /* ChatViewController.swift in Sources */,
+				60FBD10121C9E4E70012B70F /* DestinationTableViewCell.swift in Sources */,
 				6093957521C4998700DEE50A /* PeopleTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -471,7 +511,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GN3PLAKW34;
-				INFOPLIST_FILE = DDingDong/Info.plist;
+				INFOPLIST_FILE = DDingDong/Supporting/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -491,7 +531,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = GN3PLAKW34;
-				INFOPLIST_FILE = DDingDong/Info.plist;
+				INFOPLIST_FILE = DDingDong/Supporting/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

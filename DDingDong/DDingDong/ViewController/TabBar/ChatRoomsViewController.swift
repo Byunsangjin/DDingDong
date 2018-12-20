@@ -33,13 +33,18 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.tableView.separatorStyle = .none
         
-        getRoomInfo()
+        self.getRoomInfo()
+    }
+    
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.getRoomInfo()
     }
 
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("self.chatRooms.count : \(self.chatRooms.count)")
         return self.chatRooms.count
     }
     
@@ -48,9 +53,53 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRoomTableViewCell", for: indexPath) as! ChatRoomTableViewCell
         
-        print(self.chatRooms[indexPath.row].users)
+        var destinationUid: [String] = []
+        var destinationUsers: [UserModel] = []
         
-        return UITableViewCell()
+        for user in self.chatRooms[indexPath.row].users {
+            if user.key != self.myUid {
+                if self.chatRooms[indexPath.row].users.count > 2 { // 단체방일 때
+                    // 이미지 둥그렇게 처리
+                    cell.profileImage.layer.cornerRadius = cell.profileImage.frame.width / 2
+                    cell.profileImage.clipsToBounds = true
+                    
+                    cell.profileImage.image = #imageLiteral(resourceName: "groupImage")
+                }
+                
+                dataRef.child("users").child(user.key).observeSingleEvent(of: .value) { (dataSnapshot) in
+                    let userModel = UserModel()
+                    userModel.setValuesForKeys(dataSnapshot.value as! [String: AnyObject])
+                    
+                    if self.chatRooms[indexPath.row].users.count == 2 { // 1:1 채팅방일 때
+                        // 이미지 URL
+                        let url = URL(string: userModel.profileImageUrl!)
+                        
+                        // 이미지 둥그렇게 처리
+                        cell.profileImage.layer.cornerRadius = cell.profileImage.frame.width / 2
+                        cell.profileImage.clipsToBounds = true
+                        
+                        // 이미지 받아오기
+                        cell.profileImage?.kf.setImage(with: url)
+                    }
+                    
+                    if (cell.nameLabel.text?.elementsEqual(""))!{
+                        print("빈칸")
+                        cell.nameLabel.text?.append(userModel.userName!)
+                    } else {
+                        print("노 빈칸")
+                        cell.nameLabel.text?.append(", \(userModel.userName!)")
+                    }
+                    
+                    // 오름차순($0>$1)으로 comments의 값들을 받아온다
+                    let lastMsgKey = self.chatRooms[indexPath.row].messages.keys.sorted() { $0 > $1 }
+                    
+                    cell.lastMessageLabel.text = self.chatRooms[indexPath.row].messages[lastMsgKey[0]]?.message
+                }
+            }
+        }
+        
+        
+        return cell
     }
     
     

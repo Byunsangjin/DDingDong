@@ -148,3 +148,16 @@ extension AppDelegate: GIDSignInDelegate {
     }
 }
 
+
+// 타임스탬프 시간 형식 변경
+extension Int {
+    var toDayTime: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.dateFormat = "MM.dd HH:mm"
+        
+        let date = Date(timeIntervalSince1970: Double(self)/1000)
+        
+        return dateFormatter.string(from: date)
+    }
+}

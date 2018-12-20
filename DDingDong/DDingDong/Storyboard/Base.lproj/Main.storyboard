@@ -354,7 +354,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9tJ-lJ-Eed">
                                                     <rect key="frame" x="299" y="11" width="6" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="message_blue" translatesAutoresizingMaskIntoConstraints="NO" id="PSw-w7-bb9">
@@ -418,7 +418,7 @@
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sa6-kZ-tdQ">
                                                     <rect key="frame" x="106" y="11" width="6" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
-                                                    <nil key="textColor"/>
+                                                    <color key="textColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="message_gray" translatesAutoresizingMaskIntoConstraints="NO" id="cGv-I0-4JG">
@@ -485,11 +485,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="DsT-I9-2sy" firstAttribute="centerY" secondItem="eLK-Yn-0vJ" secondAttribute="centerY" id="09h-JK-fuq"/>
                             <constraint firstItem="eLK-Yn-0vJ" firstAttribute="leading" secondItem="DsT-I9-2sy" secondAttribute="trailing" constant="16" id="7FN-SR-t0Q"/>
                             <constraint firstItem="UeM-tu-MLf" firstAttribute="trailing" secondItem="qaf-SS-5L6" secondAttribute="trailing" id="FOy-Fm-B74"/>
                             <constraint firstItem="DsT-I9-2sy" firstAttribute="leading" secondItem="qaf-SS-5L6" secondAttribute="leading" constant="16" id="Ff9-UY-8Ew"/>
                             <constraint firstItem="UeM-tu-MLf" firstAttribute="top" secondItem="fGW-tY-OUl" secondAttribute="top" id="Lu1-8R-Z9q"/>
-                            <constraint firstItem="qaf-SS-5L6" firstAttribute="bottom" secondItem="DsT-I9-2sy" secondAttribute="bottom" constant="10" id="d5B-XM-XYb"/>
                             <constraint firstItem="eLK-Yn-0vJ" firstAttribute="top" secondItem="UeM-tu-MLf" secondAttribute="bottom" constant="8" id="iVa-dE-an3"/>
                             <constraint firstItem="qaf-SS-5L6" firstAttribute="trailing" secondItem="eLK-Yn-0vJ" secondAttribute="trailing" constant="24" id="j03-zE-Rzd"/>
                             <constraint firstItem="UeM-tu-MLf" firstAttribute="leading" secondItem="qaf-SS-5L6" secondAttribute="leading" id="npU-Iv-sOk"/>
@@ -498,6 +498,7 @@
                         <viewLayoutGuide key="safeArea" id="qaf-SS-5L6"/>
                     </view>
                     <connections>
+                        <outlet property="bottomConstraint" destination="t3b-CL-cI7" id="nKB-fj-Apa"/>
                         <outlet property="messageTextField" destination="DsT-I9-2sy" id="wLS-9s-a2C"/>
                         <outlet property="sendButton" destination="eLK-Yn-0vJ" id="K86-er-PAe"/>
                         <outlet property="tableView" destination="UeM-tu-MLf" id="eK3-cH-oyx"/>
@@ -583,7 +584,7 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rUr-Q0-LVf">
-                                                    <rect key="frame" x="77" y="38" width="29" height="14"/>
+                                                    <rect key="frame" x="77" y="17" width="29" height="14"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="0.57414853570000002" green="0.57416242360000003" blue="0.57415497299999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -594,8 +595,8 @@
                                                     <color key="textColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="77x-WH-stY">
-                                                    <rect key="frame" x="77" y="11" width="42" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="77x-WH-stY">
+                                                    <rect key="frame" x="77" y="11" width="0.0" height="0.0"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>

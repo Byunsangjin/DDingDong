@@ -12,5 +12,4 @@ class MyMessageTableViewCell: UITableViewCell {
     @IBOutlet var messageLabel: UILabel!
     @IBOutlet var timeLabel: UILabel!
     @IBOutlet var readUserLabel: UILabel!
-    
 }

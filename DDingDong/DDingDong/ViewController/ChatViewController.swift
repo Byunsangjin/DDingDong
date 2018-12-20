@@ -16,6 +16,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet var messageTextField: UITextField!
     @IBOutlet var sendButton: UIButton!
     
+    @IBOutlet var bottomConstraint: NSLayoutConstraint!
     
     
     // MARK:- Constants
@@ -53,9 +54,23 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.userDic[user.uid!] = true
         }
         
+        // 터치 했을 때 키보드가 사라지게 하는 제스처 추가
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.view.addGestureRecognizer(tap)
+        
         // 이미 생성된 방인지 아닌지 확인
         self.checkChatRoom()
     }
+    
+    
+    
+    // 컨트롤러가 시작 될 때
+    override func viewWillAppear(_ animated: Bool) {
+        // 알림 센터에 키보드 동작 알림 등록
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
     
     
     
@@ -76,8 +91,15 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         if self.messageList[indexPath.row].uid == self.myUid { // 내 메세지라면
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as! MyMessageTableViewCell
             
+            // 메세지 ㅅ걸정
             cell.messageLabel.text = self.messageList[indexPath.row].message
             cell.messageLabel.numberOfLines = 0
+            
+            // 시간 설정
+            if let time = self.messageList[indexPath.row].timestamp {
+                cell.timeLabel.text = time.toDayTime
+            }
+            
             return cell
         } else { // 다른 사람의 메세지라면
             let cell = tableView.dequeueReusableCell(withIdentifier: "DestinationTableViewCell", for: indexPath) as! DestinationTableViewCell
@@ -85,6 +107,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 메세지 설정
             cell.messageLabel.text = self.messageList[indexPath.row].message
             cell.messageLabel.numberOfLines = 0
+            
+            // 시간 설정
+            if let time = self.messageList[indexPath.row].timestamp {
+                cell.timeLabel.text = time.toDayTime
+            }
             
             // 유저 배열을 순회하여 uid가 일치 하는 유저의 이름과 이미지를 넣어준다.
             for user in users {
@@ -105,6 +132,13 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             return cell
         }
+    }
+    
+    
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        // 높이를 유동적으로 변경
+        return UITableView.automaticDimension
     }
     
     
@@ -135,11 +169,14 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         let value: Dictionary<String, Any> = [
             "uid": self.myUid!,
             "message": self.messageTextField.text!,
+            "timestamp": ServerValue.timestamp()
         ]
         
         self.dataRef.child("chatrooms").child(self.chatRoomUid!).child("messages").childByAutoId().setValue(value) { (error, ref) in
             // 입력 텍스트 필드 초기화
             self.messageTextField.text = ""
+            
+            self.scrollBottom()
         }
     }
     
@@ -191,7 +228,51 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
             
             self.tableView.reloadData()
+            
+            self.scrollBottom()
         })
+    }
+    
+    
+    
+    // 테이블 뷰를 맨 밑으로 이동 시키는 메소드
+    func scrollBottom() {
+        // 메세지 작성시 테이블 뷰가 맨 밑으로 이동 하는 코드
+        if self.messageList.count > 0 {
+            self.tableView.scrollToRow(at: IndexPath(item: self.messageList.count - 1, section: 0), at: UITableView.ScrollPosition.bottom, animated: false)
+        }
+    }
+    
+    
+    
+    
+    // 키보드가 나타나게 하는 메소드
+    @objc func keyboardWillShow(notification: Notification) {
+        // 키보드 사이즈를 구해 constant에 대입 시킨다. (키보드 높이 만큼 위로 올려야 하기 때문)
+        if let keyboardSize = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            self.bottomConstraint.constant = keyboardSize.height + 5
+        }
+        
+        UIView.animate(withDuration: 0, animations: {
+            self.view.layoutIfNeeded()
+        }) { (complete) in
+            self.scrollBottom()
+        }
+    }
+    
+    
+    
+    // 키보드가 사라지게 하는 메소드
+    @objc func keyboardWillHide(notification: Notification) {
+        self.bottomConstraint.constant = 20
+        self.view.layoutIfNeeded()
+    }
+    
+    
+    
+    // 터치 했을 떄 키보드가 사라지게 하는 메소드
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
     
@@ -204,6 +285,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             // 채팅방을 생성한다.
             self.dataRef.child("chatrooms").childByAutoId().child("users").setValue(nsDic) { (error, ref) in
                 print("채팅방 생성")
+                
                 // 채팅방을 생성하고 다시 채팅방 uid를 설정해 주기위해 방을 한번 더 체크 한다.
                 self.checkChatRoom()
             }

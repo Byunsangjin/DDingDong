@@ -33,7 +33,7 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.tableView.separatorStyle = .none
         
-        self.getRoomInfo()
+        //self.getRoomInfo()
     }
     
     
@@ -52,6 +52,9 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRoomTableViewCell", for: indexPath) as! ChatRoomTableViewCell
+        
+        // 이름 초기화
+        cell.nameLabel.text = ""
         
         var destinationUid: [String] = []
         var destinationUsers: [UserModel] = []
@@ -82,6 +85,7 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
                         cell.profileImage?.kf.setImage(with: url)
                     }
                     
+                    //단체 채팅방일 때도 생각해서 분기처리
                     if (cell.nameLabel.text?.elementsEqual(""))!{
                         print("빈칸")
                         cell.nameLabel.text?.append(userModel.userName!)

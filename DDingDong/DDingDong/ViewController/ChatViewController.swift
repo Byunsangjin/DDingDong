@@ -42,11 +42,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // StatusBar 색상 설정
-        appDelegate.statusBarSet(view: self.view)
-        
-        // 탭바를 숨긴다
-        self.tabBarController?.tabBar.isHidden = true
+        // 화면 세팅
+        initViewSet()
         
         // 내 정보를 넣어준다.
         self.userDic[myUid!] = true
@@ -56,8 +53,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.userDic[user.uid!] = true
         }
         
+        // 이미 생성된 방인지 아닌지 확인
         self.checkChatRoom()
     }
+    
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
     
     
     
@@ -100,6 +105,19 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             return cell
         }
+    }
+    
+    
+    
+    func initViewSet() {
+        // StatusBar 색상 설정
+        appDelegate.statusBarSet(view: self.view)
+        
+        // 탭바를 숨긴다
+        self.tabBarController?.tabBar.isHidden = true
+        
+        // 구분선 없애기
+        self.tableView.separatorStyle = .none
     }
     
     

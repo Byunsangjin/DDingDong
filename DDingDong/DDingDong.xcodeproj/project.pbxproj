@@ -28,6 +28,8 @@
 		60FBD10421CA8CEE0012B70F /* select.png in Resources */ = {isa = PBXBuildFile; fileRef = 60FBD10321CA8CEE0012B70F /* select.png */; };
 		60FBD10621CA8FDF0012B70F /* SelectUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBD10521CA8FDF0012B70F /* SelectUserViewController.swift */; };
 		60FBD10821CA96090012B70F /* SelectUserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBD10721CA96090012B70F /* SelectUserCell.swift */; };
+		60FBD10A21CB375F0012B70F /* ChatRoomsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBD10921CB375F0012B70F /* ChatRoomsViewController.swift */; };
+		60FBD10C21CB3A690012B70F /* ChatRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60FBD10B21CB3A690012B70F /* ChatRoomTableViewCell.swift */; };
 		F2F6F8527D2A680BE15B296A /* Pods_DDingDong.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223C69F29F6CACAF26762DA5 /* Pods_DDingDong.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +59,8 @@
 		60FBD10321CA8CEE0012B70F /* select.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = select.png; sourceTree = "<group>"; };
 		60FBD10521CA8FDF0012B70F /* SelectUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUserViewController.swift; sourceTree = "<group>"; };
 		60FBD10721CA96090012B70F /* SelectUserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectUserCell.swift; sourceTree = "<group>"; };
+		60FBD10921CB375F0012B70F /* ChatRoomsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomsViewController.swift; sourceTree = "<group>"; };
+		60FBD10B21CB3A690012B70F /* ChatRoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomTableViewCell.swift; sourceTree = "<group>"; };
 		7F91755A54872E5928CA4BE1 /* Pods-DDingDong.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DDingDong.debug.xcconfig"; path = "Pods/Target Support Files/Pods-DDingDong/Pods-DDingDong.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,6 +140,7 @@
 				60FBD0FE21C9E4D80012B70F /* MyMessageTableViewCell.swift */,
 				60FBD10021C9E4E70012B70F /* DestinationTableViewCell.swift */,
 				60FBD10721CA96090012B70F /* SelectUserCell.swift */,
+				60FBD10B21CB3A690012B70F /* ChatRoomTableViewCell.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -145,6 +150,7 @@
 			children = (
 				6093957421C4998700DEE50A /* PeopleTableViewController.swift */,
 				60FBC7AD21C7ED310012B70F /* SettingViewController.swift */,
+				60FBD10921CB375F0012B70F /* ChatRoomsViewController.swift */,
 			);
 			path = TabBar;
 			sourceTree = "<group>";
@@ -375,6 +381,8 @@
 				609395D621C6A33400DEE50A /* UserModel.swift in Sources */,
 				6049AD4E21C3FCB900984733 /* SplashViewController.swift in Sources */,
 				6093957921C4B0CC00DEE50A /* Utils.swift in Sources */,
+				60FBD10A21CB375F0012B70F /* ChatRoomsViewController.swift in Sources */,
+				60FBD10C21CB3A690012B70F /* ChatRoomTableViewCell.swift in Sources */,
 				60FBC7AE21C7ED310012B70F /* SettingViewController.swift in Sources */,
 				609395D921C6BCFC00DEE50A /* PeopleCell.swift in Sources */,
 				6049AD4C21C3FCB900984733 /* AppDelegate.swift in Sources */,

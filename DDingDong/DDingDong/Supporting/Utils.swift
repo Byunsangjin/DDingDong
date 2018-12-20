@@ -11,7 +11,7 @@ import UIKit
 // 알람 메세지 
 extension UIViewController {
     // 메세지
-    func alert(_ title: String?, _ message: String, completion: (()->Void)? = nil) {
+    func alert(_ title: String?, _ message: String?, completion: (()->Void)? = nil) {
         // 메인 스레드에서 실행되도록
         DispatchQueue.main.async {
             let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)

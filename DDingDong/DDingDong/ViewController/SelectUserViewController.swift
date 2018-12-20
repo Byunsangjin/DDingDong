@@ -18,7 +18,9 @@ class SelectUserViewController: UIViewController, UITableViewDelegate, UITableVi
     
     // MARK:- Variables
     var users: [UserModel] = [] // 유저 정보를 담을 객체
+    
     var selectedUser: [UserModel] = [] // 체크 한 유저
+    var selectedUserDic = Dictionary<String, Bool>()
     
     
     // MARK:- Constants
@@ -60,6 +62,9 @@ class SelectUserViewController: UIViewController, UITableViewDelegate, UITableVi
         
         cell.nameLabel.text = users[indexPath.row].userName // 이름 설정
         
+        cell.checkBox.delegate = self
+        cell.checkBox.tag = indexPath.row
+        
         return cell
     }
     
@@ -68,16 +73,38 @@ class SelectUserViewController: UIViewController, UITableViewDelegate, UITableVi
     // 체크박스를 클릭 했을 때
     func didTap(_ checkBox: BEMCheckBox) {
         if checkBox.on { // 체크 박스가 체크 됐을 때
-            
-        } else { // 체크 되지 않았을 때
-            
+            self.selectedUserDic[self.users[checkBox.tag].uid!] = true // 선택 유저 딕셔너리에 넣기
+        } else { // 체크를 풀었을 때
+            self.selectedUserDic.removeValue(forKey: self.users[checkBox.tag].uid!) // 선택 유저 딕셔너리에서 제거
         }
     }
     
     
     
+    
     // MARK:- Actions
     @IBAction func chatRoomBtnPressed(_ sender: Any) {
+        let chatVC = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
         
+        // 선택한 유저 초기화
+        selectedUser.removeAll()
+        
+        // 딕셔너리에 넣은 유저들 uid를 비교해 선택된 유저모델을 넣어준다.
+        for dic in self.selectedUserDic {
+            for user in self.users {
+                if user.uid == dic.key {
+                    self.selectedUser.append(user)
+                }
+            }
+        }
+        
+        if self.selectedUser.count < 2 { // 선택한 유저가 2명 미만이라면
+            self.alert("친구를 2명이상 선택해 주세요.", nil)
+            return
+        }
+        
+        chatVC.users = self.selectedUser
+        
+        self.navigationController?.pushViewController(chatVC, animated: true)
     }
 }

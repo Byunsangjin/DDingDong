@@ -1,5 +1,5 @@
-//
-//  SelectUserCell.swift
+	//
+//  ChatRoomTableViewCell.swift
 //  DDingDong
 //
 //  Created by Byunsangjin on 20/12/2018.
@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import BEMCheckBox
 
-class SelectUserCell: UITableViewCell {
-    @IBOutlet var checkBox: BEMCheckBox!
+class ChatRoomTableViewCell: UITableViewCell {
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var nameLabel: UILabel!
+    @IBOutlet var lastMessageLabel: UILabel!
+    @IBOutlet var timeLabel: UILabel!
 }

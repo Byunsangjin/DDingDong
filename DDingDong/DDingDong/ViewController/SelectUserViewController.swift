@@ -35,9 +35,17 @@ class SelectUserViewController: UIViewController, UITableViewDelegate, UITableVi
         
         // StatusBar 색상 설정
         self.appDelegate.statusBarSet(view: (self.navigationController?.view)!)
+        self.tabBarController?.tabBar.isHidden = true
         
         // 구분선 없애기
         self.tableView.separatorStyle = .none
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        print("disappear")
+        self.tabBarController?.tabBar.isHidden = false
+        self.navigationController?.popViewController(animated: true)
     }
     
     

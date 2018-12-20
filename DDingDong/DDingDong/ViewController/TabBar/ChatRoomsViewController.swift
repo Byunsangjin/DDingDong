@@ -18,6 +18,8 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK:- Variables
     var chatRooms: [ChatModel] = []
+
+    var userDic = Dictionary<Int, [UserModel]>() // UserModel 배열 딕셔너리
     
     
     
@@ -56,8 +58,7 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
         // 이름 초기화
         cell.nameLabel.text = ""
         
-        var destinationUid: [String] = []
-        var destinationUsers: [UserModel] = []
+        var userModelArray: [UserModel] = [] // 딕셔너리에 들어갈 UserModel 배열
         
         for user in self.chatRooms[indexPath.row].users {
             if user.key != self.myUid {
@@ -72,6 +73,8 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
                 dataRef.child("users").child(user.key).observeSingleEvent(of: .value) { (dataSnapshot) in
                     let userModel = UserModel()
                     userModel.setValuesForKeys(dataSnapshot.value as! [String: AnyObject])
+                    userModelArray.append(userModel)
+                    self.userDic[indexPath.row] = userModelArray
                     
                     if self.chatRooms[indexPath.row].users.count == 2 { // 1:1 채팅방일 때
                         // 이미지 URL
@@ -87,10 +90,8 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
                     
                     //단체 채팅방일 때도 생각해서 분기처리
                     if (cell.nameLabel.text?.elementsEqual(""))!{
-                        print("빈칸")
                         cell.nameLabel.text?.append(userModel.userName!)
                     } else {
-                        print("노 빈칸")
                         cell.nameLabel.text?.append(", \(userModel.userName!)")
                     }
                     
@@ -102,11 +103,24 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
             }
         }
         
-        
         return cell
     }
     
     
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let chatVC = self.storyboard?.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        
+        let users = self.userDic[indexPath.row] as! [UserModel]
+        
+        chatVC.users = users
+        
+        self.navigationController?.pushViewController(chatVC, animated: true)
+    }
+    
+    
+    
+    // 방 정보를 불러오는 메소드
     
     func getRoomInfo() {
         self.chatRooms.removeAll()

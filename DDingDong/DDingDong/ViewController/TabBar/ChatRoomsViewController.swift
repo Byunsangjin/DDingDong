@@ -55,9 +55,8 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ChatRoomTableViewCell", for: indexPath) as! ChatRoomTableViewCell
         
-        // 이름 초기화
-        cell.nameLabel.text = ""
-        
+
+        var nameString: String? = "" // nameLabel에 들어갈 String
         var userModelArray: [UserModel] = [] // 딕셔너리에 들어갈 UserModel 배열
         
         for user in self.chatRooms[indexPath.row].users {
@@ -89,11 +88,13 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
                     }
                     
                     //단체 채팅방일 때도 생각해서 분기처리
-                    if (cell.nameLabel.text?.elementsEqual(""))!{
-                        cell.nameLabel.text?.append(userModel.userName!)
+                    if (nameString?.isEmpty)! {
+                        nameString?.append(userModel.userName!)
                     } else {
-                        cell.nameLabel.text?.append(", \(userModel.userName!)")
+                        nameString?.append(", \(userModel.userName!)")
                     }
+                    
+                    cell.nameLabel.text = nameString
                     
                     // 오름차순($0>$1)으로 comments의 값들을 받아온다
                     let lastMsgKey = self.chatRooms[indexPath.row].messages.keys.sorted() { $0 > $1 }

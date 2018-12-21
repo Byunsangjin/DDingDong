@@ -78,6 +78,11 @@ class SignUpViewController: UIViewController {
             if error == nil { // 에러가 없다면
                 let uid = result?.user.uid
                 
+                // 사용자 이름을 넣어준다.
+                let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+                changeRequest?.displayName = self.nameTextField.text!
+                changeRequest?.commitChanges(completion: nil)
+                
                 // 선택 유무에 따른 이미지 가져오기
                 var image = UIImage()
                 if self.imageSelected! { // 이미지를 선택 했다면
@@ -88,10 +93,6 @@ class SignUpViewController: UIViewController {
                 
                 // 이미지 데이터로 변환
                 let data = image.jpegData(compressionQuality: 0.1) as! Data
-                
-                // 사용자 이름을 넣어준다.
-                result!.user.createProfileChangeRequest().displayName = self.nameTextField.text!
-                result!.user.createProfileChangeRequest().commitChanges(completion: nil)
                 
                 // 저장소에 저장
                 let spaceRef = self.stroage.reference().child("users").child(uid!)

@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import Alamofire
 
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
@@ -58,6 +59,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         self.view.addGestureRecognizer(tap)
         
+        self.tabBarController?.tabBar.isHidden = true
+        
         // 이미 생성된 방인지 아닌지 확인
         self.checkChatRoom()
     }
@@ -77,8 +80,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewWillDisappear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
     }
-    
-    
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -173,6 +174,13 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         ]
         
         self.dataRef.child("chatrooms").child(self.chatRoomUid!).child("messages").childByAutoId().setValue(value) { (error, ref) in
+            // 나를 제외한 사람들의 유저 토큰을 FCM서버에 전송
+            for user in self.users {
+                if user.uid != self.myUid {
+                    self.sendFCM(pushToken: user.pushToken!)
+                }
+            }
+            
             // 입력 텍스트 필드 초기화
             self.messageTextField.text = ""
             
@@ -223,6 +231,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.messageList.removeAll()
             
             for children in dataSnapshot.children.allObjects as! [DataSnapshot] {
+                
                 let message = ChatModel.Message(JSON: children.value as! [String: AnyObject])
                 self.messageList.append(message!)
             }
@@ -241,6 +250,35 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         if self.messageList.count > 0 {
             self.tableView.scrollToRow(at: IndexPath(item: self.messageList.count - 1, section: 0), at: UITableView.ScrollPosition.bottom, animated: false)
         }
+    }
+    
+    
+    
+    // FCM 서버에 전송
+    func sendFCM(pushToken: String?) {
+        let url = "https://fcm.googleapis.com/fcm/send"
+        let header: HTTPHeaders = [
+            "Content-Type": "application/json",
+            "Authorization": "key=AAAAZG3IWJg:APA91bGNjixyWppfVZu3Sokoz3RPH0APW0VlgwDzIX6H75CYpeYZf4owsCvJuFQOWNUptfKEO_D3i8vn83ZXGx2U70ZOqjAnO1o4VVXID4WmCuk_AqSkt-Q-k3ClndH7MRhwUvdEDlMc"
+        ]
+        
+        let userName = Auth.auth().currentUser?.displayName
+        print("userName : \(userName)")
+        
+        var notificationModel = NotificationModel()
+        notificationModel.to = pushToken!
+        notificationModel.notification.title = userName
+        notificationModel.notification.text = self.messageTextField.text!
+        notificationModel.data.title = userName
+        notificationModel.data.text = self.messageTextField.text!
+        
+        let params = notificationModel.toJSON()
+        
+        Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
+            print("Fmc send Success")
+            //print(response.result.value)
+        }
+        
     }
     
     

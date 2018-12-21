@@ -47,7 +47,16 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.getUserInfo()
+    }
+    
 
+    
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.users.count
     }
@@ -101,7 +110,8 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     func getUserInfo() {
         // DB에서 정보 받아오기
-        self.dataRef.child("users").observe(.value) { (dataSnapshot) in
+        self.dataRef.child("users").observeSingleEvent(of: .value) { (dataSnapshot) in
+            print("getUserInfo")
             // 배열 초기화 (이유 : 새로 계정을 생성할 때 DB에서 정보를 다시 받아오게 되는데 그 때 중복되기 때문)
             self.users.removeAll()
             

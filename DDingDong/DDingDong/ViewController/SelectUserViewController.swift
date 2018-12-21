@@ -42,10 +42,8 @@ class SelectUserViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     
-    override func viewWillDisappear(_ animated: Bool) {
-        print("disappear")
-        self.tabBarController?.tabBar.isHidden = false
-        self.navigationController?.popViewController(animated: true)
+    override func viewDidDisappear(_ animated: Bool) {
+        // self.tabBarController?.tabBar.isHidden = false
     }
     
     

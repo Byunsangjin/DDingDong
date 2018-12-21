@@ -19,7 +19,7 @@ class SettingViewController: UIViewController {
     // MARK:- Variables
     var user: UserModel?
     var myUid: String! = Auth.auth().currentUser?.uid
-    var imageView = UIImageView()
+    
     
     
     // MARK:- Constants
@@ -52,6 +52,10 @@ class SettingViewController: UIViewController {
             // 이미지 뷰
             let url = URL(string: self.user!.profileImageUrl!)
             self.profileImageView.kf.setImage(with: url)
+            
+            // 이미지 뷰 둥글게
+            self.profileImageView.layer.cornerRadius = 30
+            self.profileImageView.clipsToBounds = true
             
             // 상태 메세지
             self.conditionLabel.text = self.user?.condition

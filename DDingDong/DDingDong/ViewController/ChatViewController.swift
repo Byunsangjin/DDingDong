@@ -35,6 +35,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     var databaseRef: DatabaseReference?
     var observe: UInt?
+    var peopleCount: Int?
     
     var messageList: [ChatModel.Message] = [] // 채팅을 받아올 배열
     
@@ -78,7 +79,10 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self)
         self.tabBarController?.tabBar.isHidden = false
+        
+        self.databaseRef?.removeObserver(withHandle: observe!)
     }
     
     
@@ -92,7 +96,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         if self.messageList[indexPath.row].uid == self.myUid { // 내 메세지라면
             let cell = tableView.dequeueReusableCell(withIdentifier: "MyMessageTableViewCell", for: indexPath) as! MyMessageTableViewCell
             
-            // 메세지 ㅅ걸정
+            // 메세지 설정
             cell.messageLabel.text = self.messageList[indexPath.row].message
             cell.messageLabel.numberOfLines = 0
             
@@ -100,6 +104,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             if let time = self.messageList[indexPath.row].timestamp {
                 cell.timeLabel.text = time.toDayTime
             }
+            
+            // 메세지 읽었는지를 카운트 하는 메소드
+            self.setReadCount(label: cell.readUserLabel, postion: indexPath.row)
             
             return cell
         } else { // 다른 사람의 메세지라면
@@ -130,6 +137,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
                     cell.profileImage.kf.setImage(with: url)
                 }
             }
+            
+            // 메세지 읽었는지를 카운트 하는 메소드
+            self.setReadCount(label: cell.readUserLabel, postion: indexPath.row)
             
             return cell
         }
@@ -183,8 +193,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             // 입력 텍스트 필드 초기화
             self.messageTextField.text = ""
-            
-            self.scrollBottom()
         }
     }
     
@@ -229,17 +237,73 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.databaseRef = dataRef.child("chatrooms").child(self.chatRoomUid!).child("messages")
         self.observe = self.databaseRef?.observe(.value, with: { (dataSnapshot) in
             self.messageList.removeAll()
+            var readUsersDic: Dictionary<String, AnyObject> = [:]
             
             for children in dataSnapshot.children.allObjects as! [DataSnapshot] {
-                
+                // 메세지를 읽었는지 확인하는 변수
+                let key = children.key as String
                 let message = ChatModel.Message(JSON: children.value as! [String: AnyObject])
+                let message_modify = ChatModel.Message(JSON: children.value as! [String: AnyObject])
+                
+                // 읽은 유저에 내 uid 추가
+                message_modify?.readUsers[self.myUid!] = true
+                readUsersDic[key] = message_modify?.toJSON() as! NSDictionary
+                
                 self.messageList.append(message!)
             }
             
-            self.tableView.reloadData()
+            let nsDic = readUsersDic as NSDictionary
             
-            self.scrollBottom()
+            print("if = \(self.messageList.last?.readUsers.keys.contains(self.myUid!))")
+            if !(self.messageList.last?.readUsers.keys.contains(self.myUid!))! { // comments에 내 uid가 없을 경우 서버에 보고한다.
+                print("11")
+                
+                dataSnapshot.ref.updateChildValues(nsDic as! [AnyHashable : Any], withCompletionBlock: { (error, ref) in
+                    self.tableView.reloadData()
+                    
+                    // 테이블 뷰가 채팅 끝으로 이동 하도록 설정
+                    self.scrollBottom()
+                })
+            } else { // 내 uid가 있을 경우 메세지만 표현
+                print("22")
+                
+                self.tableView.reloadData()
+                
+                // 테이블 뷰가 채팅 끝으로 이동 하도록 설정
+                self.scrollBottom()
+            }
         })
+    }
+    
+    
+    
+    func setReadCount(label: UILabel?, postion: Int?) {
+        let readCount = self.messageList[postion!].readUsers.count // 읽은 유저의 수
+        
+        if self.peopleCount == nil { // 처음 받아올 때
+            self.dataRef.child("chatrooms").child(chatRoomUid!).child("users").observeSingleEvent(of: .value) { (dataSnapshot) in
+                let dic = dataSnapshot.value as! [String: Any]
+                self.peopleCount = dic.count
+                
+                let noReadCount = self.peopleCount! - readCount // 방 전체 카운드 - 읽은 유저의 수
+                
+                if noReadCount > 0 { // 읽지 않은 사람이 있을 경우
+                    label?.isHidden = false
+                    label?.text = String(noReadCount)
+                } else { // 모두 읽었을 경우
+                    label?.isHidden = true
+                }
+            }
+        } else { // 처음 받아오는게 아닐 때
+            let noReadCount = self.peopleCount! - readCount // 방 전체 카운드 - 읽은 유저의 수
+            
+            if noReadCount > 0 { // 읽지 않은 사람이 있을 경우
+                label?.isHidden = false
+                label?.text = String(noReadCount)
+            } else { // 모두 읽었을 경우
+                label?.isHidden = true
+            }
+        }
     }
     
     
@@ -276,11 +340,8 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         Alamofire.request(url, method: .post, parameters: params, encoding: JSONEncoding.default, headers: header).responseJSON { (response) in
             print("Fmc send Success")
-            //print(response.result.value)
         }
-        
     }
-    
     
     
     

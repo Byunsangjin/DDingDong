@@ -18,7 +18,6 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK:- Variables
     var chatRooms: [ChatModel] = []
-
     var userDic = Dictionary<Int, [UserModel]>() // UserModel 배열 딕셔너리
     
     
@@ -26,7 +25,7 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK:- Constants
     let myUid = Auth.auth().currentUser?.uid
     let dataRef = Database.database().reference()
-    
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
 
     // MARK:- Methods
@@ -35,7 +34,7 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
         
         self.tableView.separatorStyle = .none
         
-        //self.getRoomInfo()
+        self.appDelegate.statusBarSet(view: (self.navigationController?.view)!)
     }
     
     

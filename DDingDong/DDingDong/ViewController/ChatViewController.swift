@@ -46,7 +46,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.viewDidLoad()
         
         // 화면 세팅
-        initViewSet()
+        self.initViewSet()
         
         // 내 정보를 넣어준다.
         self.userDic[myUid!] = true

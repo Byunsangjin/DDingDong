@@ -48,14 +48,11 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     
     
-    
     override func viewWillAppear(_ animated: Bool) {
         self.getUserInfo()
     }
     
 
-    
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.users.count
@@ -143,7 +140,7 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         var selectFriendBtn = UIButton()
         self.view.addSubview(selectFriendBtn)
         selectFriendBtn.snp.makeConstraints { (make) in
-            make.bottom.equalTo(view).offset(-80)
+            make.bottom.equalTo(view).offset(-90)
             make.right.equalTo(view).offset(-20)
             make.width.height.equalTo(50)
         }

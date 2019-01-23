@@ -113,6 +113,13 @@ class SettingViewController: UIViewController {
         
         self.present(alert, animated: true)
     }
+    
+    
+    
+    // 로그아웃을 눌렀을 때
+    @IBAction func logoutPressed(_ sender: Any) {
+        try! Auth.auth().signOut() // 로그아웃
+    }
 }
 
 
@@ -121,6 +128,8 @@ extension SettingViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
         self.profileImageView.image = image
+        self.profileImageView.layer.cornerRadius = 30
+        self.profileImageView.clipsToBounds = true
         
         self.saveImage(image: image)
         

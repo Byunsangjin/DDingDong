@@ -136,4 +136,11 @@ class LoginViewController: UIViewController, GIDSignInUIDelegate, UIGestureRecog
         
         self.present(signUpVC, animated: true)
     }
+    
+    
+    // UnWind 세그웨이
+    @IBAction func gotoLoginVC(_ sender: UIStoryboardSegue) {
+        self.emailTextField.text = ""
+        self.passwordTextField.text = ""
+    }
 }

@@ -33,7 +33,7 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
         super.viewDidLoad()
         
         self.tableView.separatorStyle = .none
-        
+                
         self.appDelegate.statusBarSet(view: (self.navigationController?.view)!)
     }
     
@@ -41,6 +41,9 @@ class ChatRoomsViewController: UIViewController, UITableViewDelegate, UITableVie
     
     override func viewDidAppear(_ animated: Bool) {
         self.getRoomInfo()
+        
+        // 내비게이션 바 숨기기
+        self.navigationController?.navigationBar.isHidden = true
     }
 
     

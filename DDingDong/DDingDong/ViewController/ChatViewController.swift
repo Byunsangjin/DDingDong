@@ -70,6 +70,9 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     // 컨트롤러가 시작 될 때
     override func viewWillAppear(_ animated: Bool) {
+        // 내비게이션 바 나오게 하기
+        self.navigationController?.navigationBar.isHidden = false
+        
         // 알림 센터에 키보드 동작 알림 등록
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)

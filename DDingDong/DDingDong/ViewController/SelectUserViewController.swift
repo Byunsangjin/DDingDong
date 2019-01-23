@@ -37,6 +37,9 @@ class SelectUserViewController: UIViewController, UITableViewDelegate, UITableVi
         self.appDelegate.statusBarSet(view: (self.navigationController?.view)!)
         self.tabBarController?.tabBar.isHidden = true
         
+        // 내비게이션 바 나오게
+        self.navigationController?.navigationBar.isHidden = false
+        
         // 구분선 없애기
         self.tableView.separatorStyle = .none
     }

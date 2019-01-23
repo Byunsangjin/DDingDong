@@ -108,12 +108,12 @@ class SignUpViewController: UIViewController {
                     spaceRef.downloadURL { (url, error) in
                         // 에러가 발생 했을 때
                         guard let imageUrl = url else {
-                            print("download error \(error?.localizedDescription)")
+                            print("download error \(String(describing: error?.localizedDescription))")
                             return
                         }
                         
                         if error != nil {
-                            print("에러 = \(error?.localizedDescription)")
+                            print("에러 = \(String(describing: error?.localizedDescription))")
                         } else {
                             // 데이터 베이스에 접근해서 이름 값과 이미지 다운로드 url을 넣어준다
                             self.dataRef.child("users").child(uid!).setValue(["userName": self.nameTextField.text!, "profileImageUrl": imageUrl.absoluteString, "uid": uid])
@@ -133,7 +133,7 @@ class SignUpViewController: UIViewController {
                 } else if error?._code == AuthErrorCode.weakPassword.rawValue {
                     self.alert(nil, "비밀번호는 6자리 이상이어야 합니다.")
                 } else {
-                    self.alert(nil, "계정 생성 실패 : \(error?.localizedDescription)")
+                    self.alert(nil, "계정 생성 실패 : \(String(describing: error?.localizedDescription))")
                 }
             }
         }

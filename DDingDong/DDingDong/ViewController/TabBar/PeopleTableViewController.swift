@@ -39,6 +39,8 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
         // 구분선 없애기
         self.tableView.separatorStyle = .none
         
+        
+        
         // 유저 정보 받아오기
         self.getUserInfo()
         
@@ -50,6 +52,11 @@ class PeopleTableViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func viewWillAppear(_ animated: Bool) {
         self.getUserInfo()
+        
+        // 탭바 나오게 하기
+        self.tabBarController?.tabBar.isHidden = false
+        // 내비게이션 바 숨기기
+        self.navigationController?.navigationBar.isHidden = true
     }
     
 
